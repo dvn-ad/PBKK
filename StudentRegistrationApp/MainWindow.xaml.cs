@@ -8,11 +8,11 @@ namespace StudentRegistrationApp
         public MainWindow()
         {
 
-            
-        
-InitializeComponent();
+
+
+            InitializeComponent();
         }
-        private void BtnSimpan_Click(object sender,RoutedEventArgs e)
+        private void BtnSimpan_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtNim.Text))
             {
@@ -40,7 +40,7 @@ InitializeComponent();
                 MessageBox.Show("Pilih jenis kelamin!");
                 return;
             }
-            
+
             string nim = txtNim.Text;
             string nama = txtNama.Text;
             string prodi = "";

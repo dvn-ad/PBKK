@@ -12,6 +12,32 @@ namespace StudentRegistrationApp
 
             InitializeComponent();
         }
+        private void BtnHapus_Click(object sender, RoutedEventArgs e)
+        {
+            if (lstMahasiswa.SelectedItem != null)
+
+            {
+                lstMahasiswa.Items.Remove(
+                lstMahasiswa.SelectedItem);
+            }
+            else
+            {
+                MessageBox.Show(
+                "Pilih data yang ingin dihapus!");
+            }
+        }
+        private void BtnReset_Click(object sender, RoutedEventArgs e)
+        {
+            txtNim.Clear();
+            txtNama.Clear();
+
+            cmbProdi.SelectedIndex = -1;
+
+            rbLaki.IsChecked = false;
+            rbPerempuan.IsChecked = false;
+
+            txtNim.Focus();
+        }
         private void BtnSimpan_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtNim.Text))

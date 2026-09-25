@@ -44,9 +44,6 @@
                 <ComboBoxItem Content="Sistem Informasi" />
                 <ComboBoxItem Content="Manajemen" />
                 <ComboBoxItem Content="Akuntansi" />
-
-
-
             </ComboBox>
 
             <TextBlock Text="Jenis Kelamin" />
@@ -63,11 +60,23 @@
 
             </StackPanel>
 
-            <Button Content="Simpan"
-                    Width="120"
-                    Height="40"
-                    HorizontalAlignment="Left"
-                    Click="BtnSimpan_Click" />
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Simpan"
+                        Width="120"
+                        Height="40"
+                        Margin="0,0,10,0"
+                        Click="BtnSimpan_Click" />
+                <Button Content="Reset"
+                        Width="120"
+                        Height="40"
+                        Margin="0,0,10,0"
+                        Click="BtnReset_Click" />
+                <Button Content="Hapus"
+                        Width="120"
+                        Height="40"
+                        Margin="0,0,10,0"
+                        Click="BtnHapus_Click" />
+            </StackPanel>
 
         </StackPanel>
 

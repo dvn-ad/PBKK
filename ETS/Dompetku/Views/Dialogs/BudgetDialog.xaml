@@ -1,0 +1,57 @@
+<Window x:Class="Dompetku.Views.Dialogs.BudgetDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Atur Anggaran Kategori" Height="420" Width="420"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Background="{StaticResource BrushAppBg}">
+    <Border Padding="24">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                <TextBlock Text="Pagu Anggaran" FontSize="18" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}"/>
+                <TextBlock Text="Tetapkan batas pengeluaran bulanan per kategori" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Form Content -->
+            <StackPanel Grid.Row="1">
+                <!-- Category -->
+                <TextBlock Text="Pilih Kategori Pengeluaran *" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6"/>
+                <ComboBox x:Name="CmbCategory" Style="{StaticResource ModernComboBox}" DisplayMemberPath="CategoryName" SelectedValuePath="CategoryId" Margin="0,0,0,14"/>
+
+                <!-- Limit Amount -->
+                <TextBlock Text="Batas Pagu Anggaran (Rp) *" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6"/>
+                <TextBox x:Name="TxtLimit" Style="{StaticResource ModernTextBox}" FontSize="15" FontWeight="Bold" Margin="0,0,0,14"/>
+
+                <!-- Month & Year -->
+                <Grid Margin="0,0,0,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                        <TextBlock Text="Bulan *" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6"/>
+                        <ComboBox x:Name="CmbMonth" Style="{StaticResource ModernComboBox}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="6,0,0,0">
+                        <TextBlock Text="Tahun *" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6"/>
+                        <ComboBox x:Name="CmbYear" Style="{StaticResource ModernComboBox}"/>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+
+            <!-- Buttons -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                <Button Content="Batal" Style="{StaticResource BtnOutline}" Width="90" Click="OnCancelClick" Margin="0,0,10,0"/>
+                <Button Content="Simpan Pagu" Style="{StaticResource BtnPrimary}" Click="OnSaveClick" Padding="18,8"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

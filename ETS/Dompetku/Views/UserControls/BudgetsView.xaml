@@ -1,0 +1,110 @@
+<UserControl x:Class="Dompetku.Views.UserControls.BudgetsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="clr-namespace:Dompetku.Models"
+             Background="{StaticResource BrushAppBg}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
+        <StackPanel MaxWidth="1100" HorizontalAlignment="Stretch">
+
+            <!-- Top Header & Actions -->
+            <Grid Margin="0,0,0,24">
+                <StackPanel>
+                    <TextBlock Text="Pagu Anggaran Bulanan" FontSize="22" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}"/>
+                    <TextBlock Text="Kendalikan gaya hidup dan batasi pengeluaran per kategori setiap bulannya" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <Button Content="+ Pasang Anggaran" Style="{StaticResource BtnPrimary}" Click="OnAddBudgetClick" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- Month / Year Selector Card -->
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,24" Padding="16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Selector Controls -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Periode Bulan:" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource BrushTextPrimary}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <ComboBox x:Name="CmbMonthSelector" Width="140" Height="34" Margin="0,0,10,0" SelectionChanged="OnPeriodChanged"/>
+                        <ComboBox x:Name="CmbYearSelector" Width="100" Height="34" SelectionChanged="OnPeriodChanged"/>
+                    </StackPanel>
+
+                    <!-- Summary Stats in Header -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <StackPanel Margin="0,0,24,0">
+                            <TextBlock Text="Total Pagu" FontSize="11" Foreground="{StaticResource BrushTextSecondary}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding TotalBudgetLimit, Converter={StaticResource CurrencyConverter}}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" HorizontalAlignment="Right"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="0,0,24,0">
+                            <TextBlock Text="Total Terpakai" FontSize="11" Foreground="{StaticResource BrushTextSecondary}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding TotalBudgetSpent, Converter={StaticResource CurrencyConverter}}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource BrushDanger}" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Budget Cards List -->
+            <ItemsControl ItemsSource="{Binding Budgets}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:Budget}">
+                        <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,16" Padding="18">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Top Row: Category + Status Badge + Actions -->
+                                <Grid Grid.Row="0" Margin="0,0,0,10">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Border Width="12" Height="12" CornerRadius="6" Background="{Binding CategoryColor, Converter={StaticResource HexToBrushConverter}}" Margin="0,0,8,0"/>
+                                        <TextBlock Text="{Binding CategoryName}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}"/>
+                                        <Border CornerRadius="4" Padding="8,2" Margin="12,0,0,0"
+                                                Background="{Binding StatusColor, Converter={StaticResource HexToBrushConverter}}" Opacity="0.9">
+                                            <TextBlock Text="{Binding StatusText}" FontSize="11" FontWeight="Bold" Foreground="White"/>
+                                        </Border>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                        <Button Content="Edit Pagu" Style="{StaticResource BtnOutline}" FontSize="11" Padding="10,4" Margin="0,0,6,0"
+                                                Click="OnEditBudgetClick" Tag="{Binding}"/>
+                                        <Button Content="Hapus" Style="{StaticResource BtnDanger}" FontSize="11" Padding="10,4"
+                                                Command="{Binding DataContext.DeleteBudgetCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- Middle Row: Progress Bar -->
+                                <ProgressBar Grid.Row="1" Value="{Binding PercentageUsed, Mode=OneWay}" Maximum="100" Height="10" Margin="0,4,0,8"
+                                             Foreground="{Binding StatusColor, Converter={StaticResource HexToBrushConverter}}"
+                                             Background="#E2E8F0"/>
+
+                                <!-- Bottom Row: Details and Percentage -->
+                                <Grid Grid.Row="2">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Realisasi: " FontSize="12" Foreground="{StaticResource BrushTextSecondary}"/>
+                                        <TextBlock Text="{Binding FormattedSpent}" FontSize="12" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,0,14,0"/>
+
+                                        <TextBlock Text="Pagu Batas: " FontSize="12" Foreground="{StaticResource BrushTextSecondary}"/>
+                                        <TextBlock Text="{Binding FormattedLimit}" FontSize="12" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,0,14,0"/>
+
+                                        <TextBlock Text="{Binding FormattedRemaining}" FontSize="12" FontWeight="SemiBold" Foreground="{Binding StatusColor, Converter={StaticResource HexToBrushConverter}}"/>
+                                    </StackPanel>
+
+                                    <TextBlock Text="{Binding PercentageUsed, StringFormat='{}{0:F1}% Terpakai'}" 
+                                               FontSize="12" FontWeight="Bold" Foreground="{Binding StatusColor, Converter={StaticResource HexToBrushConverter}}"
+                                               HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,55 @@
+<Window x:Class="Dompetku.Views.Dialogs.CategoryDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Kelola Kategori" Height="380" Width="400"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Background="{StaticResource BrushAppBg}">
+    <Border Padding="24">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                <TextBlock x:Name="TxtTitle" Text="Tambah Kategori" FontSize="18" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}"/>
+                <TextBlock Text="Kategori digunakan untuk mengelompokkan transaksi" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Form Content -->
+            <StackPanel Grid.Row="1">
+                <!-- Name -->
+                <TextBlock Text="Nama Kategori *" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6"/>
+                <TextBox x:Name="TxtName" Style="{StaticResource ModernTextBox}" Margin="0,0,0,14"/>
+
+                <!-- Type -->
+                <TextBlock Text="Tipe Transaksi *" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6"/>
+                <ComboBox x:Name="CmbType" Style="{StaticResource ModernComboBox}" Margin="0,0,0,14">
+                    <ComboBoxItem Content="Pengeluaran (Expense)" Tag="Expense" IsSelected="True"/>
+                    <ComboBoxItem Content="Pemasukan (Income)" Tag="Income"/>
+                </ComboBox>
+
+                <!-- Color Code -->
+                <TextBlock Text="Warna Penanda" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6"/>
+                <ComboBox x:Name="CmbColor" Style="{StaticResource ModernComboBox}">
+                    <ComboBoxItem Content="Merah (#EF4444)" Tag="#EF4444" IsSelected="True"/>
+                    <ComboBoxItem Content="Hijau (#10B981)" Tag="#10B981"/>
+                    <ComboBoxItem Content="Biru (#2563EB)" Tag="#2563EB"/>
+                    <ComboBoxItem Content="Oranye (#F97316)" Tag="#F97316"/>
+                    <ComboBoxItem Content="Kuning (#F59E0B)" Tag="#F59E0B"/>
+                    <ComboBoxItem Content="Ungu (#8B5CF6)" Tag="#8B5CF6"/>
+                    <ComboBoxItem Content="Pink (#EC4899)" Tag="#EC4899"/>
+                    <ComboBoxItem Content="Teal (#0D9488)" Tag="#0D9488"/>
+                </ComboBox>
+            </StackPanel>
+
+            <!-- Buttons -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                <Button Content="Batal" Style="{StaticResource BtnOutline}" Width="90" Click="OnCancelClick" Margin="0,0,10,0"/>
+                <Button Content="Simpan" Style="{StaticResource BtnPrimary}" Width="100" Click="OnSaveClick"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

@@ -1,0 +1,183 @@
+<UserControl x:Class="Dompetku.Views.UserControls.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="clr-namespace:Dompetku.Models"
+             Background="{StaticResource BrushAppBg}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
+        <StackPanel MaxWidth="1100" HorizontalAlignment="Stretch">
+
+            <!-- Welcome Header -->
+            <Grid Margin="0,0,0,24">
+                <StackPanel>
+                    <TextBlock Text="{Binding GreetingText}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}"/>
+                    <TextBlock Text="Berikut adalah ringkasan kesehatan finansial pribadi Anda saat ini." FontSize="13" Foreground="{StaticResource BrushTextSecondary}" Margin="0,4,0,0"/>
+                </StackPanel>
+                <Button Content="Segarkan Data" Style="{StaticResource BtnOutline}" Command="{Binding RefreshCommand}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- 4 Metric Cards -->
+            <Grid Margin="0,0,0,28">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Total Saldo -->
+                <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}" Margin="0,0,12,0" Background="#2563EB">
+                    <StackPanel>
+                        <TextBlock Text="TOTAL SALDO AKTIF" FontSize="11" FontWeight="Bold" Foreground="#BFDBFE"/>
+                        <TextBlock Text="{Binding TotalBalance, Converter={StaticResource CurrencyConverter}}" FontSize="22" FontWeight="Bold" Foreground="White" Margin="0,8,0,4"/>
+                        <TextBlock Text="Semua dompet &amp; rekening" FontSize="11" Foreground="#DBEAFE"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Pemasukan Bulan Ini -->
+                <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}" Margin="6,0,6,0">
+                    <StackPanel>
+                        <TextBlock Text="PEMASUKAN BULAN INI" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushSuccess}"/>
+                        <TextBlock Text="{Binding IncomeThisMonth, Converter={StaticResource CurrencyConverter}}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,8,0,4"/>
+                        <TextBlock Text="Total uang masuk" FontSize="11" Foreground="{StaticResource BrushTextSecondary}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Pengeluaran Bulan Ini -->
+                <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}" Margin="6,0,6,0">
+                    <StackPanel>
+                        <TextBlock Text="PENGELUARAN BULAN INI" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushDanger}"/>
+                        <TextBlock Text="{Binding ExpenseThisMonth, Converter={StaticResource CurrencyConverter}}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,8,0,4"/>
+                        <TextBlock Text="Total uang keluar" FontSize="11" Foreground="{StaticResource BrushTextSecondary}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Net Cash Flow -->
+                <Border Grid.Column="3" Style="{StaticResource CardBorderStyle}" Margin="12,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="ARUS KAS BERSIH (NET)" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushTextSecondary}"/>
+                        <TextBlock Text="{Binding NetCashFlow, Converter={StaticResource CurrencyConverter}}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushPrimary}" Margin="0,8,0,4"/>
+                        <TextBlock Text="Pemasukan - Pengeluaran" FontSize="11" Foreground="{StaticResource BrushTextSecondary}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Middle Row: Dompet Saya & Active Budgets -->
+            <Grid Margin="0,0,0,28">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Dompet Saya -->
+                <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}" Margin="0,0,14,0">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,14">
+                            <TextBlock Text="Dompet &amp; Rekening Saya" FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}"/>
+                            <TextBlock Text="Saldo Terkini" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <ItemsControl ItemsSource="{Binding Wallets}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type models:Wallet}">
+                                    <Border BorderBrush="{StaticResource BrushBorder}" BorderThickness="0,0,0,1" Padding="0,10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Color dot -->
+                                            <Border Width="12" Height="12" CornerRadius="6" Background="{Binding ColorCode, Converter={StaticResource HexToBrushConverter}}" VerticalAlignment="Center" Margin="0,0,12,0"/>
+
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding WalletName}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource BrushTextPrimary}"/>
+                                                <TextBlock Text="{Binding WalletType}" FontSize="11" Foreground="{StaticResource BrushTextSecondary}"/>
+                                            </StackPanel>
+
+                                            <TextBlock Grid.Column="2" Text="{Binding FormattedBalance}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+
+                <!-- Monitoring Anggaran Bulan Ini -->
+                <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}" Margin="0,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="Status Anggaran Bulan Ini" FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,0,0,14"/>
+
+                        <ItemsControl ItemsSource="{Binding ActiveBudgets}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type models:Budget}">
+                                    <Border Margin="0,0,0,12">
+                                        <StackPanel>
+                                            <Grid Margin="0,0,0,4">
+                                                <TextBlock Text="{Binding CategoryName}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextPrimary}"/>
+                                                <TextBlock Text="{Binding StatusText}" FontSize="11" FontWeight="Bold" Foreground="{Binding StatusColor, Converter={StaticResource HexToBrushConverter}}" HorizontalAlignment="Right"/>
+                                            </Grid>
+
+                                            <ProgressBar Value="{Binding PercentageUsed, Mode=OneWay}" Maximum="100" Height="8" Margin="0,2,0,4"
+                                                         Foreground="{Binding StatusColor, Converter={StaticResource HexToBrushConverter}}"
+                                                         Background="#E2E8F0"/>
+
+                                            <Grid>
+                                                <TextBlock Text="{Binding FormattedSpent}" FontSize="11" Foreground="{StaticResource BrushTextSecondary}"/>
+                                                <TextBlock Text="{Binding FormattedLimit, StringFormat='Limit: {0}'}" FontSize="11" Foreground="{StaticResource BrushTextSecondary}" HorizontalAlignment="Right"/>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <!-- If Empty -->
+                        <TextBlock Text="Belum ada pagu anggaran untuk bulan ini." 
+                                   FontSize="12" Foreground="{StaticResource BrushTextMuted}" FontStyle="Italic"
+                                   Visibility="{Binding ActiveBudgets.Count, Converter={StaticResource BoolToVisConverter}}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Bottom Row: Recent 5 Transactions -->
+            <Border Style="{StaticResource CardBorderStyle}">
+                <StackPanel>
+                    <Grid Margin="0,0,0,14">
+                        <TextBlock Text="Transaksi Terkini" FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}"/>
+                        <TextBlock Text="5 catatan mutasi terakhir" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <DataGrid ItemsSource="{Binding RecentTransactions}" Style="{StaticResource ModernDataGrid}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tanggal" Binding="{Binding TransactionDate, StringFormat='dd MMM yyyy HH:mm'}" Width="160"/>
+                            <DataGridTemplateColumn Header="Kategori" Width="180">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Border Width="10" Height="10" CornerRadius="5" Background="{Binding CategoryColor, Converter={StaticResource HexToBrushConverter}}" Margin="0,0,8,0"/>
+                                            <TextBlock Text="{Binding CategoryName}" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Dompet" Binding="{Binding WalletName}" Width="150"/>
+                            <DataGridTextColumn Header="Catatan" Binding="{Binding Description}" Width="*"/>
+                            <DataGridTemplateColumn Header="Nominal" Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DisplayAmountSign}" FontWeight="Bold" 
+                                                   Foreground="{Binding TransactionType, Converter={StaticResource TransactionTypeColorConverter}}"
+                                                   HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

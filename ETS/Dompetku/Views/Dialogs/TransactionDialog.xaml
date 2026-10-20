@@ -1,0 +1,72 @@
+<Window x:Class="Dompetku.Views.Dialogs.TransactionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Catat Transaksi Baru" Height="520" Width="440"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Background="{StaticResource BrushAppBg}">
+    <Border Padding="24">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                <TextBlock Text="Transaksi Baru" FontSize="18" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}"/>
+                <TextBlock Text="Masukkan detail pemasukan atau pengeluaran" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Form Content -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <!-- Type Selector (Income vs Expense) -->
+                    <TextBlock Text="Tipe Transaksi" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6"/>
+                    <Grid Margin="0,0,0,14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <RadioButton x:Name="RbExpense" Content="Pengeluaran (-)" IsChecked="True" 
+                                     Checked="OnTypeChanged"
+                                     GroupName="TxType" Height="38" Margin="0,0,4,0"
+                                     HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                                     FontSize="13" FontWeight="SemiBold" Background="#FEE2E2" Foreground="#DC2626"/>
+                        <RadioButton x:Name="RbIncome" Grid.Column="1" Content="Pemasukan (+)" 
+                                     Checked="OnTypeChanged"
+                                     GroupName="TxType" Height="38" Margin="4,0,0,0"
+                                     HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                                     FontSize="13" FontWeight="SemiBold" Background="#DCFCE7" Foreground="#16A34A"/>
+                    </Grid>
+
+                    <!-- Amount -->
+                    <TextBlock Text="Nominal (Rp) *" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6"/>
+                    <TextBox x:Name="TxtAmount" Style="{StaticResource ModernTextBox}" FontSize="15" FontWeight="Bold" Margin="0,0,0,14"/>
+
+                    <!-- Wallet -->
+                    <TextBlock Text="Pilih Dompet / Akun *" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6"/>
+                    <ComboBox x:Name="CmbWallet" Style="{StaticResource ModernComboBox}" DisplayMemberPath="WalletName" SelectedValuePath="WalletId" Margin="0,0,0,14"/>
+
+                    <!-- Category -->
+                    <TextBlock Text="Pilih Kategori *" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6"/>
+                    <ComboBox x:Name="CmbCategory" Style="{StaticResource ModernComboBox}" DisplayMemberPath="CategoryName" SelectedValuePath="CategoryId" Margin="0,0,0,14"/>
+
+                    <!-- Date -->
+                    <TextBlock Text="Tanggal Transaksi *" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6"/>
+                    <DatePicker x:Name="DpDate" Height="38" Margin="0,0,0,14"/>
+
+                    <!-- Description -->
+                    <TextBlock Text="Catatan / Keterangan" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6"/>
+                    <TextBox x:Name="TxtDescription" Style="{StaticResource ModernTextBox}" Height="54" AcceptsReturn="True" TextWrapping="Wrap"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Buttons -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                <Button Content="Batal" Style="{StaticResource BtnOutline}" Width="90" Click="OnCancelClick" Margin="0,0,10,0"/>
+                <Button Content="Simpan Transaksi" Style="{StaticResource BtnPrimary}" Click="OnSaveClick" Padding="20,8"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

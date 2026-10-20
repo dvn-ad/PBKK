@@ -1,0 +1,102 @@
+<UserControl x:Class="Dompetku.Views.UserControls.WalletsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="clr-namespace:Dompetku.Models"
+             Background="{StaticResource BrushAppBg}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
+        <StackPanel MaxWidth="1100" HorizontalAlignment="Stretch">
+
+            <!-- Top Header & Actions -->
+            <Grid Margin="0,0,0,24">
+                <StackPanel>
+                    <TextBlock Text="Manajemen Dompet &amp; Akun" FontSize="22" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}"/>
+                    <TextBlock Text="Kelola rekening bank, uang kas, dompet digital, dan mutasi saldo" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Content="Transfer Saldo" Style="{StaticResource BtnOutline}" Click="OnTransferClick" Margin="0,0,10,0"/>
+                    <Button Content="+ Tambah Dompet" Style="{StaticResource BtnPrimary}" Click="OnAddWalletClick"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Wallet Cards Grid -->
+            <TextBlock Text="DAFTAR DOMPET AKTIF" FontSize="12" FontWeight="Bold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,12"/>
+
+            <ItemsControl ItemsSource="{Binding Wallets}" Margin="0,0,0,28">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:Wallet}">
+                        <Border Style="{StaticResource CardBorderStyle}" Width="310" Height="150" Margin="0,0,16,16" Padding="16">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Top row: Color pill & Type badge -->
+                                <Grid Grid.Row="0">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Border Width="12" Height="12" CornerRadius="6" Background="{Binding ColorCode, Converter={StaticResource HexToBrushConverter}}" Margin="0,0,8,0"/>
+                                        <TextBlock Text="{Binding WalletName}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}"/>
+                                    </StackPanel>
+                                    <Border HorizontalAlignment="Right" Background="#F1F5F9" CornerRadius="4" Padding="6,2">
+                                        <TextBlock Text="{Binding WalletType}" FontSize="11" Foreground="{StaticResource BrushTextSecondary}" FontWeight="SemiBold"/>
+                                    </Border>
+                                </Grid>
+
+                                <!-- Middle row: Balance -->
+                                <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="0,8,0,0">
+                                    <TextBlock Text="Saldo Saat Ini" FontSize="11" Foreground="{StaticResource BrushTextSecondary}"/>
+                                    <TextBlock Text="{Binding FormattedBalance}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushPrimary}" Margin="0,2,0,0"/>
+                                </StackPanel>
+
+                                <!-- Bottom row: Edit / Delete buttons -->
+                                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Edit" Style="{StaticResource BtnOutline}" FontSize="11" Padding="10,4" Margin="0,0,6,0"
+                                            Click="OnEditWalletClick" Tag="{Binding}"/>
+                                    <Button Content="Hapus" Style="{StaticResource BtnDanger}" FontSize="11" Padding="10,4"
+                                            Command="{Binding DataContext.DeleteWalletCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Transfers History Table -->
+            <Border Style="{StaticResource CardBorderStyle}" Padding="20">
+                <StackPanel>
+                    <Grid Margin="0,0,0,14">
+                        <TextBlock Text="Riwayat Transfer Saldo Antar Dompet" FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}"/>
+                        <TextBlock Text="{Binding Transfers.Count, StringFormat='{}{0} Mutasi'}" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <DataGrid ItemsSource="{Binding Transfers}" Style="{StaticResource ModernDataGrid}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tanggal" Binding="{Binding TransferDate, StringFormat='dd MMM yyyy HH:mm'}" Width="150"/>
+                            <DataGridTextColumn Header="Dari Dompet (Asal)" Binding="{Binding FromWalletName}" Width="170"/>
+                            <DataGridTextColumn Header="Ke Dompet (Tujuan)" Binding="{Binding ToWalletName}" Width="170"/>
+                            <DataGridTemplateColumn Header="Nominal Transfer" Width="140">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FormattedAmount}" FontWeight="Bold" Foreground="{StaticResource BrushPrimary}" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Biaya Admin" Binding="{Binding AdminFee, Converter={StaticResource CurrencyConverter}}" Width="110"/>
+                            <DataGridTextColumn Header="Total Terpotong" Binding="{Binding FormattedTotal}" Width="130"/>
+                            <DataGridTextColumn Header="Catatan" Binding="{Binding Notes}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

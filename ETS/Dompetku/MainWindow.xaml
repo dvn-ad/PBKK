@@ -1,0 +1,180 @@
+<Window x:Class="Dompetku.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:Dompetku.ViewModels"
+        xmlns:uc="clr-namespace:Dompetku.Views.UserControls"
+        Title="DOMPETKU – Sistem Informasi Keuangan Pribadi"
+        Height="780" Width="1240" MinHeight="680" MinWidth="1050"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BrushAppBg}">
+
+    <Window.Resources>
+        <!-- DataTemplates mapping ViewModel to UserControl View -->
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <uc:DashboardView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TransactionViewModel}">
+            <uc:TransactionsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:WalletViewModel}">
+            <uc:WalletsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:BudgetViewModel}">
+            <uc:BudgetsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ReportViewModel}">
+            <uc:ReportsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CategoryViewModel}">
+            <uc:CategoriesView/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ================= SIDEBAR NAVIGATION ================= -->
+        <Border Grid.Column="0" Background="{StaticResource BrushSidebarBg}" Padding="16,20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Brand Header -->
+                <StackPanel Grid.Row="0" Margin="4,0,0,28">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="36" Height="36" CornerRadius="10" Background="{StaticResource BrushPrimary}" Margin="0,0,10,0">
+                            <TextBlock Text="💳" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="DOMPETKU" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                            <TextBlock Text="Sistem Finansial" FontSize="11" Foreground="{StaticResource BrushSidebarText}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Navigation Links -->
+                <StackPanel Grid.Row="1">
+                    <TextBlock Text="MENU UTAMA" FontSize="10" FontWeight="Bold" Foreground="#475569" Margin="10,0,0,8"/>
+
+                    <!-- 1. Dashboard -->
+                    <RadioButton Style="{StaticResource SidebarNavButton}" IsChecked="True"
+                                 Command="{Binding NavigateDashboardCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📊" Margin="0,0,10,0" FontSize="14"/>
+                            <TextBlock Text="Dashboard" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <!-- 2. Transactions -->
+                    <RadioButton Style="{StaticResource SidebarNavButton}"
+                                 Command="{Binding NavigateTransactionsCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📝" Margin="0,0,10,0" FontSize="14"/>
+                            <TextBlock Text="Riwayat Transaksi" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <!-- 3. Wallets -->
+                    <RadioButton Style="{StaticResource SidebarNavButton}"
+                                 Command="{Binding NavigateWalletsCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="💳" Margin="0,0,10,0" FontSize="14"/>
+                            <TextBlock Text="Dompet &amp; Akun" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <!-- 4. Budgets -->
+                    <RadioButton Style="{StaticResource SidebarNavButton}"
+                                 Command="{Binding NavigateBudgetsCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🎯" Margin="0,0,10,0" FontSize="14"/>
+                            <TextBlock Text="Pagu Anggaran" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <!-- 5. Reports -->
+                    <RadioButton Style="{StaticResource SidebarNavButton}"
+                                 Command="{Binding NavigateReportsCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📈" Margin="0,0,10,0" FontSize="14"/>
+                            <TextBlock Text="Laporan &amp; Analitik" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <!-- 6. Categories -->
+                    <RadioButton Style="{StaticResource SidebarNavButton}"
+                                 Command="{Binding NavigateCategoriesCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🏷️" Margin="0,0,10,0" FontSize="14"/>
+                            <TextBlock Text="Kelola Kategori" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+
+                <!-- Bottom User Card & Logout -->
+                <StackPanel Grid.Row="2">
+                    <Border BorderBrush="#1E293B" BorderThickness="0,1,0,0" Padding="0,14,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- User Avatar -->
+                            <Border Width="34" Height="34" CornerRadius="17" Background="#334155" Margin="0,0,10,0">
+                                <TextBlock Text="👤" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- User Info -->
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding UserDisplayName}" FontSize="12" FontWeight="SemiBold" Foreground="White" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Text="{Binding UsernameDisplay}" FontSize="10" Foreground="{StaticResource BrushSidebarText}"/>
+                            </StackPanel>
+
+                            <!-- Logout Button -->
+                            <Button Grid.Column="2" Content="Keluar" Style="{StaticResource BtnOutline}" FontSize="10" Padding="8,3"
+                                    Foreground="#F87171" BorderBrush="#7F1D1D" Background="#1E1B2E"
+                                    Command="{Binding LogoutCommand}"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ================= MAIN CONTENT HOST ================= -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="64"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Top Header Bar -->
+            <Border Grid.Row="0" Background="White" BorderBrush="{StaticResource BrushBorder}" BorderThickness="0,0,0,1" Padding="28,0">
+                <Grid VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Aplikasi Keuangan Pribadi" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource BrushTextPrimary}"/>
+                        <TextBlock Text=" • SQL Server Local Database" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Top Action Buttons -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Button Content="Transfer Saldo" Style="{StaticResource BtnOutline}" Margin="0,0,10,0"
+                                Command="{Binding QuickTransferCommand}"/>
+                        <Button Content="+ Catat Transaksi" Style="{StaticResource BtnPrimary}"
+                                Command="{Binding QuickAddTransactionCommand}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Dynamic View Host -->
+            <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
+        </Grid>
+    </Grid>
+</Window>

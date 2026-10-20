@@ -1,0 +1,136 @@
+<UserControl x:Class="Dompetku.Views.UserControls.ReportsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="clr-namespace:Dompetku.Models"
+             Background="{StaticResource BrushAppBg}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
+        <StackPanel MaxWidth="1100" HorizontalAlignment="Stretch">
+
+            <!-- Top Header & Period Selector -->
+            <Grid Margin="0,0,0,24">
+                <StackPanel>
+                    <TextBlock Text="Laporan &amp; Analitik Finansial" FontSize="22" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}"/>
+                    <TextBlock Text="Analisis pola pengeluaran, tren arus kas, dan rasio tabungan" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock Text="Periode Laporan:" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource BrushTextPrimary}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <ComboBox x:Name="CmbMonthSelector" Width="140" Height="34" Margin="0,0,10,0" SelectionChanged="OnPeriodChanged"/>
+                    <ComboBox x:Name="CmbYearSelector" Width="100" Height="34" SelectionChanged="OnPeriodChanged"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- 4 Metric Cards for Selected Period -->
+            <Grid Margin="0,0,0,28">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}" Margin="0,0,10,0">
+                    <StackPanel>
+                        <TextBlock Text="TOTAL PEMASUKAN" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushSuccess}"/>
+                        <TextBlock Text="{Binding TotalIncome, Converter={StaticResource CurrencyConverter}}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}" Margin="5,0,5,0">
+                    <StackPanel>
+                        <TextBlock Text="TOTAL PENGELUARAN" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushDanger}"/>
+                        <TextBlock Text="{Binding TotalExpense, Converter={StaticResource CurrencyConverter}}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}" Margin="5,0,5,0">
+                    <StackPanel>
+                        <TextBlock Text="SURPLUS / DEFISIT" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushPrimary}"/>
+                        <TextBlock Text="{Binding NetCashFlow, Converter={StaticResource CurrencyConverter}}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushPrimary}" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="3" Style="{StaticResource CardBorderStyle}" Margin="10,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="RASIO TABUNGAN" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushTextSecondary}"/>
+                        <TextBlock Text="{Binding SavingsRate, StringFormat='{}{0:F1}%'}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- 2-Column Content: Category Breakdown + 6 Month Trends -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.1*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Category Breakdown -->
+                <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}" Margin="0,0,14,0" Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="Distribusi Pengeluaran per Kategori" FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,0,0,16"/>
+
+                        <ItemsControl ItemsSource="{Binding CategoryExpenses}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type models:CategoryExpenseSummary}">
+                                    <Border Margin="0,0,0,14">
+                                        <StackPanel>
+                                            <Grid Margin="0,0,0,4">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Border Width="10" Height="10" CornerRadius="5" Background="{Binding ColorCode, Converter={StaticResource HexToBrushConverter}}" Margin="0,0,8,0"/>
+                                                    <TextBlock Text="{Binding CategoryName}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource BrushTextPrimary}"/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                    <TextBlock Text="{Binding FormattedAmount}" FontSize="12" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,0,8,0"/>
+                                                    <TextBlock Text="{Binding FormattedPercentage}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}"/>
+                                                </StackPanel>
+                                            </Grid>
+
+                                            <!-- Progress Visual Bar -->
+                                            <ProgressBar Value="{Binding Percentage, Mode=OneWay}" Maximum="100" Height="8"
+                                                         Foreground="{Binding ColorCode, Converter={StaticResource HexToBrushConverter}}"
+                                                         Background="#F1F5F9"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <!-- Empty state -->
+                        <TextBlock Text="Tidak ada catatan pengeluaran pada periode ini." 
+                                   FontSize="12" Foreground="{StaticResource BrushTextMuted}" FontStyle="Italic"
+                                   Visibility="{Binding CategoryExpenses.Count, Converter={StaticResource BoolToVisConverter}}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Historical 6-Month Cashflow Trend -->
+                <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}" Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="Tren Arus Kas (6 Bulan Terakhir)" FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,0,0,16"/>
+
+                        <DataGrid ItemsSource="{Binding MonthlyTrends}" Style="{StaticResource ModernDataGrid}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Bulan" Binding="{Binding MonthLabel}" Width="110"/>
+                                <DataGridTemplateColumn Header="Pemasukan" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding FormattedIncome}" FontWeight="Bold" Foreground="{StaticResource BrushSuccess}" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Pengeluaran" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding FormattedExpense}" FontWeight="Bold" Foreground="{StaticResource BrushDanger}" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Dompetku.Tests/Dompetku.Tests.csproj" />
+  <Project Path="Dompetku/Dompetku.csproj" />
+</Solution>

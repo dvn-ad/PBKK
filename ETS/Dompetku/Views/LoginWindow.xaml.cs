@@ -15,6 +15,17 @@ namespace Dompetku.Views
 
             TxtPasswordBox.Password = _viewModel.Password;
 
+            _viewModel.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(LoginViewModel.Password))
+                {
+                    if (TxtPasswordBox.Password != _viewModel.Password)
+                    {
+                        TxtPasswordBox.Password = _viewModel.Password;
+                    }
+                }
+            };
+
             _viewModel.LoginSuccessful += OnLoginSuccessful;
         }
 

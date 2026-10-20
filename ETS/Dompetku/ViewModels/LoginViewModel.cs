@@ -54,7 +54,7 @@ namespace Dompetku.ViewModels
         public string HeaderTitle => IsRegisterMode ? "Buat Akun Baru" : "Masuk ke Dompetku";
         public string SubmitButtonText => IsRegisterMode ? "Daftar Sekarang" : "Masuk";
         public string ToggleModePrompt => IsRegisterMode ? "Sudah memiliki akun?" : "Belum memiliki akun?";
-        public string ToggleModeActionText => IsRegisterMode ? "Masuk di sini" : "Daftar gratis";
+        public string ToggleModeActionText => IsRegisterMode ? "Masuk di sini" : "Daftar";
 
         public ICommand SubmitCommand { get; }
         public ICommand ToggleModeCommand { get; }
@@ -64,7 +64,23 @@ namespace Dompetku.ViewModels
         public LoginViewModel()
         {
             SubmitCommand = new RelayCommand(ExecuteSubmit);
-            ToggleModeCommand = new RelayCommand(() => IsRegisterMode = !IsRegisterMode);
+            ToggleModeCommand = new RelayCommand(ToggleMode);
+        }
+
+        private void ToggleMode()
+        {
+            IsRegisterMode = !IsRegisterMode;
+            if (IsRegisterMode)
+            {
+                Username = string.Empty;
+                Password = string.Empty;
+                FullName = string.Empty;
+            }
+            else
+            {
+                Username = string.Empty;
+                Password = string.Empty;
+            }
         }
 
         private void ExecuteSubmit()
@@ -73,6 +89,22 @@ namespace Dompetku.ViewModels
 
             if (IsRegisterMode)
             {
+                if (string.IsNullOrWhiteSpace(FullName))
+                {
+                    ErrorMessage = "Nama lengkap harus diisi.";
+                    return;
+                }
+                if (string.IsNullOrWhiteSpace(Username) || Username.Trim().Length < 3)
+                {
+                    ErrorMessage = "Username minimal 3 karakter.";
+                    return;
+                }
+                if (string.IsNullOrWhiteSpace(Password) || Password.Length < 6)
+                {
+                    ErrorMessage = "Password minimal 6 karakter.";
+                    return;
+                }
+
                 if (AuthService.Register(Username, Password, FullName, out string err))
                 {
                     LoginSuccessful?.Invoke();
